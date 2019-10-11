@@ -17,6 +17,32 @@ abstract class AbstractDumperTest extends TestCase
     
     abstract public function dumpProvider(): array;
     
+    public function formatProvider(): array
+    {
+        return array_map(
+            function (Format $format) {
+                return [$format, $format->equals($this->format())];
+            },
+            Format::all()
+        );
+    }
+    
+    /**
+     * @dataProvider formatProvider
+     */
+    final public function testSupports(Format $format, bool $expected): void
+    {
+        self::assertEquals(
+            $expected,
+            $this->dumper->supports($format),
+            sprintf(
+                "Expect {$format} for %s to be %s",
+                get_class($this->dumper),
+                var_export($expected, true)
+            )
+        );
+    }
+    
     /**
      * @dataProvider dumpProvider
      */

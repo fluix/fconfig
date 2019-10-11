@@ -12,90 +12,112 @@ use org\bovigo\vfs\vfsStreamDirectory;
 
 final class CaseProvider
 {
-    public static function json(string $section = ""): ValidCase
+    public static function json(): ValidCase
     {
         $file = vfsStream::newFile("config.json")
             ->at(self::root())
             ->withContent(
                 <<<JSON
 {
-    "option1": "value1",
-    "database": "mm",
-    "boolean": false,
-    "null": null,
-    "int": 397,
-    "object": {
-        "key": 21
-    },
-    "array": [
-        {
-            "option31": "test_env_value_json1"
-        }
-    ],
-    "nested": {
-        "child1": {
-            "child2": {
-                "env": "test_env_value_json2"
+    "values": {
+        "option1": "value1",
+        "database": "mm",
+        "boolean": false,
+        "null": null,
+        "int": 397,
+        "// commented-key": "val",
+        "commented-value": "// commented-value",
+        "object": {
+            "key": 21
+        },
+        "array": [
+            {
+                "option31": "test_env_value_json1"
+            }
+        ],
+        "nested": {
+            "child1": {
+                "child2": {
+                    "env": "test_env_value_json2"
+                }
             }
         }
-    }
+    },
+    "required": [
+       "option1",
+       "database"
+    ]
 }
 JSON
             );
     
         return new ValidCase(
-            Source::fromPath($file->url(), $section),
+            Source::fromPath($file->url()),
             ["TEST_ENV_JSON1" => "test_env_value_json1", "TEST_ENV_JSON2" => "test_env_value_json2"],
             [
-                "option1"  => "value1",
-                "database" => "mm",
-                "boolean"  => false,
-                "null"     => null,
-                "int"      => 397,
-                "object"   => [
-                    "key" => 21,
-                ],
-                "array"    => [
-                    [
-                        "option31" => "test_env_value_json1",
+                "values" => [
+                    "option1"  => "value1",
+                    "database" => "mm",
+                    "boolean"  => false,
+                    "null"     => null,
+                    "int"      => 397,
+                    "commented-value" => "// commented-value",
+                    "object"   => [
+                        "key" => 21,
                     ],
-                ],
-                "nested"   => [
-                    "child1" => [
-                        "child2" => [
-                            "env" => "test_env_value_json2",
+                    "array"    => [
+                        [
+                            "option31" => "test_env_value_json1",
                         ],
                     ],
+                    "nested"   => [
+                        "child1" => [
+                            "child2" => [
+                                "env" => "test_env_value_json2",
+                            ],
+                        ],
+                    ],
+                ],
+                "required" => [
+                    "option1",
+                    "database",
                 ],
             ],
             <<<JSON
 {
-    "option1": "value1",
-    "database": "mm",
-    "boolean": false,
-    "null": null,
-    "int": 397,
-    "object": {
-        "key": 21
-    },
-    "array": [
-        {
-            "option31": "test_env_value_json1"
-        }
-    ],
-    "nested": {
-        "child1": {
-            "child2": {
-                "env": "test_env_value_json2"
+    "values": {
+        "option1": "value1",
+        "database": "mm",
+        "boolean": false,
+        "null": null,
+        "int": 397,
+        "commented-value": "// commented-value",
+        "object": {
+            "key": 21
+        },
+        "array": [
+            {
+                "option31": "test_env_value_json1"
             }
-        }
+        ],
+        "nested": {
+            "child1": {
+                "child2": {
+                    "env": "test_env_value_json2"
+                }
+            }
+        },
+        "required": [
+           "option1",
+           "database"
+        ]
     }
 }
 JSON
         );
     }
     
-    public static function db(string $section = ""): ValidCase
+    public static function db(): ValidCase
     {
         $file = vfsStream::newFile(".my.cnf")
             ->at(self::root())
@@ -110,26 +132,28 @@ JSON
             );
     
         return new ValidCase(
-            Source::fromPath($file->url(), $section),
+            Source::fromPath($file->url()),
             ["TEST_ENV_DB" => "test_env_value_db"],
             [
-                "host"     => "localhost",
-                "database" => "schema",
-                "password" => "secret",
-                "user"     => "test_env_value_db",
+                "values" => [
+                    "APP_MYSQL_HOST"     => "localhost",
+                    "APP_MYSQL_DATABASE" => "schema",
+                    "APP_MYSQL_PASSWORD" => "secret",
+                    "APP_MYSQL_USER"     => "test_env_value_db",
+                ],
             ],
             <<<JSON
 {
-    "host": "localhost",
-    "database": "schema",
-    "password": "secret",
-    "user": "test_env_value_db"
+    "APP_MYSQL_HOST": "localhost",
+    "APP_MYSQL_DATABASE": "schema",
+    "APP_MYSQL_PASSWORD": "secret",
+    "APP_MYSQL_USER": "test_env_value_db"
 }
 JSON
         );
     }
     
-    public static function invalid(string $section = ""): BaseCase
+    public static function invalid(): BaseCase
     {
         $file = vfsStream::newFile("invalid.none")
             ->at(self::root())
@@ -141,7 +165,32 @@ CONTENT
             );
         
         return new BaseCase(
-            Source::fromPath($file->url(), $section),
+            Source::fromPath($file->url()),
+            []
+        );
+    }
+    
+    public static function missedRequired(): BaseCase
+    {
+        $file = vfsStream::newFile("invalid.required.json")
+            ->at(self::root())
+            ->withContent(
+                <<<CONTENT
+{
+    "values": {
+        "option1": "value1",
+        "database": "mm"
+    },
+    "required": [
+        "option1",
+        "option2"
+    ]
+}
+CONTENT
+            );
+        
+        return new BaseCase(
+            Source::fromPath($file->url()),
             []
         );
     }

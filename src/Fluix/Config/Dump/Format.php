@@ -8,7 +8,7 @@ use Fluix\Config\Exception\InvalidArgumentException;
 
 final class Format
 {
-    private const FORMATS = [".json", ".php", ".const.php"];
+    private const FORMATS = [".json", ".array.php", ".const.php", ".parameters.yml"];
     private $format;
     
     private function __construct(string $format)
@@ -26,7 +26,7 @@ final class Format
     
     public static function php(): self
     {
-        return new self(".php");
+        return new self(".array.php");
     }
     
     public static function const(): self
@@ -34,9 +34,38 @@ final class Format
         return new self(".const.php");
     }
     
+    public static function yaml(): self
+    {
+        return new self(".parameters.yml");
+    }
+    
     public function __toString(): string
     {
         return $this->format;
+    }
+    
+    public function equals($value): bool
+    {
+        if (is_string($value)) {
+            return $this->format === $value;
+        }
+        
+        if ($value instanceof self) {
+            return $this->format === $value->format;
+        }
+        
+        return false;
+    }
+    
+    /** @return self[] */
+    public static function all(): array
+    {
+        return array_map(
+            function (string $format) {
+                return new self($format);
+            },
+            self::FORMATS
+        );
     }
     
     public function destination(string $basepath): string

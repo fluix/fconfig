@@ -29,11 +29,21 @@ class MyCnfReader implements Reader
             throw new Exception("Missed required options: " . \implode(", ", \array_keys($diff)));
         }
         
-        return $parsed["client"];
+        return $this->toResponse($parsed["client"]);
     }
     
     public function supports(File $source): bool
     {
         return ".my.cnf" === $source->basename();
+    }
+    
+    private function toResponse(array $client): array
+    {
+        $response = [];
+        foreach ($client as $key => $value) {
+            $response["APP_MYSQL_" . \strtoupper($key)] = $value;
+        }
+        
+        return ["values" => $response];
     }
 }

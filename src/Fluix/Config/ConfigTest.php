@@ -4,58 +4,43 @@ declare(strict_types = 1);
 
 namespace Fluix\Config;
 
+use Fluix\Config\Dump\Destination;
 use Fluix\Config\Dump\Format;
+use Fluix\Config\Exception\Exception;
 use Fluix\Config\Test\CaseProvider;
-use Fluix\Config\Test\Cases\ValidCase;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
     private $config;
-    private $destinationContent;
+    private $format;
     private $destination;
+    private $content;
     
-    public function dumpProvider()
+    public function testValidContent()
     {
-        return [
-            [CaseProvider::json()],
-            [CaseProvider::db()],
-        ];
-    }
-    
-    /**
-     * @dataProvider dumpProvider
-     */
-    public function testDump(ValidCase $case)
-    {
-        $this->config->dump($this->destination, $case->source());
-        $content = $this->destinationContent->getContent();
+        $case = CaseProvider::db();
+        $this->config->dump($case->source(), $this->destination);
+        $content = $this->content->getContent();
         self::assertEquals($case->json(), $content);
     }
     
-    public function testPostProcessor()
+    public function testMissedRequired()
     {
-        $case = CaseProvider::json();
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches("/^Missing required option/");
         
-        $postProcessor = $this->prophesize(PostProcessor::class);
-        $postProcessor->supports($case->expected())
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-    
-        $postProcessor->process($case->expected())
-            ->shouldBeCalledOnce();
-        
-        $this->config->withPostProcessor($postProcessor->reveal());
-        $this->config->dump($this->destination, $case->source());
+        $case = CaseProvider::missedRequired();
+        $this->config->dump($case->source(), $this->destination);
     }
     
     protected function setUp(): void
     {
-        $this->config = Factory::jsonConfig(str_pad("", 16, "a"));
+        $this->format = Format::json();
+        $this->config = Factory::config(str_pad("", 16, "a"));
         
-        $root = vfsStream::setup();
-        $this->destinationContent = vfsStream::newFile(Format::json()->destination("config"))->at($root);
-        $this->destination = File::fromPath($this->destinationContent->url(), "w");
+        $this->content = vfsStream::newFile($this->format->destination("config"))->at(vfsStream::setup());
+        $this->destination = Destination::create(dirname($this->content->url()), $this->format, "config");
     }
 }

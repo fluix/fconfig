@@ -7,27 +7,20 @@ namespace Fluix\Config;
 final class Source
 {
     private $source;
-    private $section;
     
-    private function __construct(File $source, string $section = "")
+    private function __construct(File $source)
     {
         $this->source = $source;
-        $this->section = $section;
     }
     
-    public static function fromPath(string $path, string $section = ""): self
+    public static function fromPath(string $path): self
     {
-        return new self(File::fromPath($path), $section);
+        return new self(File::fromPath($path));
     }
     
     public function source(): File
     {
         return $this->source;
-    }
-    
-    public function section(): string
-    {
-        return $this->section;
     }
     
     public function __toString(): string

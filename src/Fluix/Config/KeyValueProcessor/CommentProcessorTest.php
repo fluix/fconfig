@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Fluix\Config\ValueProcessor;
+namespace Fluix\Config\KeyValueProcessor;
 
 use PHPUnit\Framework\TestCase;
 
-class EnvVariableProcessorTest extends TestCase
+class CommentProcessorTest extends TestCase
 {
     private $processor;
     
@@ -14,8 +14,8 @@ class EnvVariableProcessorTest extends TestCase
     {
         return [
             ["qwe", "qwe"],
-            ["\${QWE}", "\${QWE}"],
-            ["\${QWE}", "abc", "QWE=abc"],
+            ["//comment", ""],
+            ["// comment", ""],
         ];
     }
     
@@ -34,6 +34,6 @@ class EnvVariableProcessorTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->processor = new EnvVariableProcessor();
+        $this->processor = new CommentProcessor();
     }
 }

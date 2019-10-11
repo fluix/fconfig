@@ -57,8 +57,10 @@
         "test": [
             "phpunit -c $(pwd)/phpunit.xml.dist"
         ],
+        "lint-autofix": [
+            "phpcbf -s -n --standard=$(pwd)/phpcs.ruleset.xml --runtime-set testVersion 7.2- --extensions=php --encoding=utf-8 $(pwd)/src/ 2>/dev/null || true"
+        ],
         "lint": [
-            "phpcbf -s -n --standard=$(pwd)/phpcs.ruleset.xml --runtime-set testVersion 7.2- --extensions=php --encoding=utf-8 $(pwd)/src/ 2>/dev/null || true",
             "phpcs -s -n --standard=$(pwd)/phpcs.ruleset.xml --runtime-set testVersion 7.2- --extensions=php --encoding=utf-8 $(pwd)/src/"
         ],
         "ci": [

@@ -32,10 +32,12 @@ CONTENT
         
         self::assertEquals(
             [
-                "host"     => "localhost",
-                "database" => "schema",
-                "password" => "secret",
-                "user"     => "username",
+                "values" => [
+                    "APP_MYSQL_HOST"     => "localhost",
+                    "APP_MYSQL_DATABASE" => "schema",
+                    "APP_MYSQL_PASSWORD" => "secret",
+                    "APP_MYSQL_USER"     => "username",
+                ],
             ],
             $actual
         );

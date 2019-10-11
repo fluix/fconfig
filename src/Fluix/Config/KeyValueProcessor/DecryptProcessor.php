@@ -2,12 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Fluix\Config\ValueProcessor;
+namespace Fluix\Config\KeyValueProcessor;
 
 use Fluix\Config\Crypt;
+use Fluix\Config\KeyProcessor;
 use Fluix\Config\ValueProcessor;
 
-final class DecryptVariableProcessor implements ValueProcessor
+final class DecryptProcessor implements ValueProcessor, KeyProcessor
 {
     private $crypt;
     

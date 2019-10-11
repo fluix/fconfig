@@ -51,6 +51,11 @@ final class File
         return $this->file->getBasename();
     }
     
+    public function folder(): string
+    {
+        return dirname($this->file->getPathname());
+    }
+    
     public function __toString(): string
     {
         return $this->file->getPathname();

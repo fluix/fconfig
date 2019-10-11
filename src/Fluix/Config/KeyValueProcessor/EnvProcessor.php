@@ -2,11 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Fluix\Config\ValueProcessor;
+namespace Fluix\Config\KeyValueProcessor;
 
+use Fluix\Config\KeyProcessor;
 use Fluix\Config\ValueProcessor;
 
-final class EnvVariableProcessor implements ValueProcessor
+final class EnvProcessor implements ValueProcessor, KeyProcessor
 {
     public function process(string $value): string
     {

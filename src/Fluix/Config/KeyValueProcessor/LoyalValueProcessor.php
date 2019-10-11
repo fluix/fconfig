@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Fluix\Config\ValueProcessor;
+namespace Fluix\Config\KeyValueProcessor;
 
 use Fluix\Config\ValueProcessor;
 
-class LoyalValueProcessor
+final class LoyalValueProcessor
 {
     private $processors;
     
