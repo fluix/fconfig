@@ -51,7 +51,7 @@ final class Parser
                 unset($config[$oldKey]);
             }
             
-            if (empty($key)) {
+            if (!is_numeric($key) && empty((string)$key)) {
                 continue;
             }
             
