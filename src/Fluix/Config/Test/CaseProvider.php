@@ -32,7 +32,7 @@ final class CaseProvider
         },
         "array": [
             {
-                "option31": "test_env_value_json1"
+                "option31": "\${TEST_ENV_JSON1}"
             }
         ],
         "nested": {
