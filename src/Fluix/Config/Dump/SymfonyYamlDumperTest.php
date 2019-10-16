@@ -12,11 +12,44 @@ class SymfonyYamlDumperTest extends AbstractDumperTest
     {
         $expected = <<<JSON
 parameters:
-    qwe: 1
+    option1: value1
+    database: schema
+    boolean: false
+    'null': null
+    secret_value: secret-value-here
+    int: 397
+    object: { key: 21 }
+    array: [{ option31: test_env }]
+    nested: { child1: { child2: { env: test_env_value_json2 } } }
 JSON;
     
         return [
-            [["qwe" => 1], $expected],
+            [
+                [
+                    "option1"      => "value1",
+                    "database"     => "schema",
+                    "boolean"      => false,
+                    "null"         => null,
+                    "secret_value" => "secret-value-here",
+                    "int"          => 397,
+                    "object"       => [
+                        "key" => 21,
+                    ],
+                    "array"        => [
+                        [
+                            "option31" => "test_env",
+                        ],
+                    ],
+                    "nested"       => [
+                        "child1" => [
+                            "child2" => [
+                                "env" => "test_env_value_json2",
+                            ],
+                        ],
+                    ],
+                ],
+                $expected,
+            ],
         ];
     }
     

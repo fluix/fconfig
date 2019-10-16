@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": ">=7.2",
-        "readdle/crypto": "^0.0.3"
+        "readdle/crypto": "^0.0.3",
+        "symfony/yaml": "^4.3"
     },
     "autoload": {
         "exclude-from-classmap": ["*Test.php"],
