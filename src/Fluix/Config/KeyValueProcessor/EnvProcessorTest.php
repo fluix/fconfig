@@ -16,6 +16,7 @@ class EnvProcessorTest extends TestCase
             ["qwe", "qwe"],
             ["\${QWE}", "\${QWE}"],
             ["\${QWE}", "abc", "QWE=abc"],
+            ["\${QWE}", "", "QWE="],
         ];
     }
     

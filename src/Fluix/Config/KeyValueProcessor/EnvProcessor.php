@@ -17,7 +17,7 @@ final class EnvProcessor implements ValueProcessor, KeyProcessor
                 $match = $matches[0];
                 $name = $matches[1] ?: '';
             
-                if ($name && ($value = \getenv($name))) {
+                if ($name && (false !== $value = \getenv($name))) {
                     return $value;
                 }
             
