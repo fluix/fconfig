@@ -15,6 +15,7 @@ use Fluix\Config\KeyValueProcessor\DecryptProcessor;
 use Fluix\Config\KeyValueProcessor\EnvProcessor;
 use Fluix\Config\KeyValueProcessor\LoyalKeyProcessor;
 use Fluix\Config\KeyValueProcessor\LoyalValueProcessor;
+use Fluix\Config\PreProcessor\AutoEnvPreProcessor;
 use Fluix\Config\Reader\JsonReader;
 use Fluix\Config\Reader\MyCnfReader;
 use Fluix\Config\Reader\RecursiveReader;
@@ -36,7 +37,22 @@ final class Factory
         return $config;
     }
     
-    public static function parser(string $secret): Parser
+    public static function configAutoEnv(string $secret, string $autoenv = "AUTOENV_", callable ...$processors): Config
+    {
+        $config = new Config(
+            self::parser($secret, $autoenv),
+            new JsonDumper,
+            new PhpConstDumper,
+            new PhpDumper,
+            new SymfonyYamlDumper
+        );
+        
+        $config->withPostProcessors(...$processors);
+        
+        return $config;
+    }
+    
+    public static function parser(string $secret, string $autoenv = "AUTOENV_"): Parser
     {
         return new Parser(
             new LoyalKeyProcessor(
@@ -52,6 +68,7 @@ final class Factory
                     new DefaultCrypt(Secret::fromString($secret))
                 )
             ),
+            new AutoEnvPreProcessor($autoenv),
             new MyCnfReader,
             new RecursiveReader(new JsonReader)
         );
