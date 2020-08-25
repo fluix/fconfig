@@ -195,6 +195,41 @@ CONTENT
         );
     }
     
+    public static function autoExpand(): ValidCase
+    {
+        $file = vfsStream::newFile("auto-expand.json")
+            ->at(self::root())
+            ->withContent(
+                <<<CONTENT
+{
+    "values": {}
+}
+CONTENT
+            );
+        
+        return new ValidCase(
+            Source::fromPath($file->url()),
+            [
+                "AUTOENV_TEST1" => "test1",
+                "AUTOENV_TEST2" => "test2",
+            ],
+            [
+                "values" => [
+                    "TEST1"   => "test1",
+                    "TEST2"   => "test2",
+                ],
+            ],
+            <<<JSON
+{
+    "values": {
+        "TEST1": "test1",
+        "TEST2": "test2"
+    }
+}
+JSON
+        );
+    }
+    
     private static function root(): vfsStreamDirectory
     {
         return vfsStream::setup();

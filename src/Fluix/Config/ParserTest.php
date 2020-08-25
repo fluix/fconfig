@@ -8,38 +8,29 @@ use Fluix\Config\Crypt\DefaultCrypt;
 use Fluix\Config\Crypt\Secret;
 use Fluix\Config\Exception\Exception;
 use Fluix\Config\Factory;
-use Fluix\Config\Source;
 use Fluix\Config\Test\CaseProvider;
+use Fluix\Config\Test\Cases\BaseCase;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
 {
     private $parser;
     private $crypt;
+    /** @var BaseCase[] */
+    private $cases = [];
     
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function testJson()
     {
-        parent::__construct($name, $data, $dataName);
-        $this->crypt = new DefaultCrypt(Secret::fromString(str_pad("", 16, "a")));
+        $case = $this->case(CaseProvider::json());
+        $actual = $this->parser->parse($case->source());
+        self::assertEquals($case->expected(), $actual->toArray());
     }
     
-    public function provider()
+    public function testDb()
     {
-        $case1 = CaseProvider::json();
-        $case2 = CaseProvider::db();
-        $case1->populate($this->crypt);
-        
-        return [
-            [$case1->source(), $case1->expected()],
-            [$case2->source(), $case2->expected()],
-        ];
-    }
-    
-    /** @dataProvider provider */
-    public function testCases(Source $source, array $expected)
-    {
-        $actual = $this->parser->parse($source);
-        self::assertEquals($expected, $actual->toArray());
+        $case = $this->case(CaseProvider::db());
+        $actual = $this->parser->parse($case->source());
+        self::assertEquals($case->expected(), $actual->toArray());
     }
     
     public function testUnsupportedConfigs()
@@ -52,8 +43,32 @@ class ParserTest extends TestCase
         $this->parser->parse($case->source());
     }
     
+    public function testAutoExpantion()
+    {
+        $case = $this->case(CaseProvider::autoExpand());
+        $actual = $this->parser->parse($case->source());
+        self::assertEquals($case->expected(), $actual->toArray());
+    }
+    
     protected function setUp(): void
     {
+        $this->crypt = new DefaultCrypt(Secret::fromString(str_pad("", 16, "a")));
         $this->parser = Factory::parser(str_pad("", 16, "a"));
+    }
+    
+    protected function tearDown(): void
+    {
+        foreach ($this->cases as $case) {
+            $case->depopulate();
+        }
+        $this->cases = [];
+    }
+    
+    private function case(BaseCase $case): BaseCase
+    {
+        $case->populate($this->crypt);
+        $this->cases[] = $case;
+        
+        return $case;
     }
 }

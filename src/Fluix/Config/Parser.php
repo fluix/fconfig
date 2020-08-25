@@ -12,24 +12,29 @@ final class Parser
 {
     private $keyProcessor;
     private $valueProcessor;
+    private $preprocessor;
     private $readers;
     
-    public function __construct(LoyalKeyProcessor $keyProcessor, LoyalValueProcessor $valueProcessor, Reader ...$readers)
+    public function __construct(LoyalKeyProcessor $keyProcessor, LoyalValueProcessor $valueProcessor, PreProcessorInterface $preprocessor, Reader ...$readers)
     {
         $this->keyProcessor = $keyProcessor;
         $this->valueProcessor = $valueProcessor;
+        $this->preprocessor = $preprocessor;
         $this->readers = $readers;
     }
     
     public function parse(Source $config): ParserResult
     {
-        $result = null;
         foreach ($this->readers as $reader) {
             if (!$reader->supports($config->source())) {
                 continue;
             }
         
-            return $this->process($reader->read($config->source()));
+            return $this->process(
+                $this->preprocessor->preprocess(
+                    $reader->read($config->source())
+                )
+            );
         }
         
         throw new Exception(

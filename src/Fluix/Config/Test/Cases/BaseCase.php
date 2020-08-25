@@ -4,6 +4,7 @@ namespace Fluix\Config\Test\Cases;
 
 use Fluix\Config\Crypt;
 use Fluix\Config\Source;
+use Fluix\Config\Test\EnvPopulation;
 
 class BaseCase
 {
@@ -13,7 +14,7 @@ class BaseCase
     public function __construct(Source $source, array $env)
     {
         $this->source = $source;
-        $this->env = $env;
+        $this->env = new EnvPopulation($env);
         $this->populate(null);
     }
     
@@ -24,10 +25,12 @@ class BaseCase
     
     public function populate(?Crypt $crypt): void
     {
-        foreach ($this->env as $key => $value) {
-            $value = (null !== $crypt) ? $crypt->encrypt($value) : $value;
-            putenv(implode("=", [$key, $value]));
-        }
+        $this->env->populate($crypt);
+    }
+    
+    public function depopulate(): void
+    {
+        $this->env->depopulate();
     }
     
     public function __toString()

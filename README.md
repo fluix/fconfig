@@ -253,7 +253,7 @@ parameters:
 ```
 
 Contents of `config.json` will be:
-```yaml
+```json
 {
     "option1": "value1",
     "database": "schema-overridden",
@@ -277,4 +277,15 @@ Contents of `config.json` will be:
         }
     }
 }
+```
+
+```php
+<?php
+
+require_once "vendor/autoload.php";
+
+// Assume you need configuration file to be auto-expanded from environment variables.
+// For this purpose you can name your variables with default prefix "AUTOENV_" (customizable via the second argument)
+// e.g. "AUTOENV_REAL_VARIABLE_NAME=real-value" will available in your config as REAL_VARIABLE_NAME=real-value
+$config = \Fluix\Config\Factory::configAutoEnv("super-secret-key");
 ```
