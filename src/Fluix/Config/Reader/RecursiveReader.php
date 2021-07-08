@@ -9,7 +9,7 @@ use Fluix\Config\Reader;
 
 final class RecursiveReader implements Reader
 {
-    private $origin;
+    private Reader $origin;
     
     public function __construct(Reader $origin)
     {
@@ -19,7 +19,7 @@ final class RecursiveReader implements Reader
     public function read(File $source): array
     {
         $result = $this->origin->read($source);
-        $base = $result["base"] ?? null;
+        $base   = $result["base"] ?? null;
         unset($result["base"]);
         
         if ($base) {

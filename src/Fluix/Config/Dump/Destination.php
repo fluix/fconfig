@@ -8,13 +8,13 @@ use Fluix\Config\File;
 
 final class Destination
 {
-    private $format;
-    private $file;
+    private Format $format;
+    private File $file;
     
     private function __construct(File $file, Format $format)
     {
         $this->format = $format;
-        $this->file = $file;
+        $this->file   = $file;
     }
     
     public static function create(string $folder, Format $format, string $basename = "config"): self

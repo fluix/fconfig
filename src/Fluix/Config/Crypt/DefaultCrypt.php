@@ -6,9 +6,9 @@ namespace Fluix\Config\Crypt;
 
 use Fluix\Config\Crypt;
 
-class DefaultCrypt implements Crypt
+final class DefaultCrypt implements Crypt
 {
-    private $secret;
+    private Secret $secret;
     
     public function __construct(Secret $secret)
     {

@@ -11,14 +11,14 @@ use Fluix\Config\Test\CaseProvider;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends TestCase
+final class ConfigTest extends TestCase
 {
-    private $config;
-    private $format;
-    private $destination;
-    private $content;
+    private Config $config;
+    private Format $format;
+    private Destination $destination;
+    private \org\bovigo\vfs\vfsStreamFile $content;
     
-    public function testValidContent()
+    public function testValidContent(): void
     {
         $case = CaseProvider::db();
         $this->config->dump($case->source(), $this->destination);
@@ -26,7 +26,7 @@ class ConfigTest extends TestCase
         self::assertEquals($case->json(), $content);
     }
     
-    public function testMissedRequired()
+    public function testMissedRequired(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessageMatches("/^Missing required option/");
@@ -38,9 +38,9 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->format = Format::json();
-        $this->config = Factory::config(str_pad("", 16, "a"));
+        $this->config = Factory::config(\str_pad("", 16, "a"));
         
-        $this->content = vfsStream::newFile($this->format->destination("config"))->at(vfsStream::setup());
-        $this->destination = Destination::create(dirname($this->content->url()), $this->format, "config");
+        $this->content     = vfsStream::newFile($this->format->destination("config"))->at(vfsStream::setup());
+        $this->destination = Destination::create(\dirname($this->content->url()), $this->format, "config");
     }
 }

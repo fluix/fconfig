@@ -10,6 +10,6 @@ final class CommentProcessor implements KeyProcessor
 {
     public function process(string $value): string
     {
-        return 0 === strpos((string)$value, "//") ? "" : $value;
+        return 0 === \strpos((string)$value, "//") ? "" : $value;
     }
 }

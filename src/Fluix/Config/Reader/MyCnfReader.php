@@ -8,7 +8,7 @@ use Fluix\Config\Exception\Exception;
 use Fluix\Config\File;
 use Fluix\Config\Reader;
 
-class MyCnfReader implements Reader
+final class MyCnfReader implements Reader
 {
     private const REQUIRED_OPTIONS = [
         "user",
@@ -20,12 +20,17 @@ class MyCnfReader implements Reader
     public function read(File $source): array
     {
         $parsed = \parse_ini_string($source->read(), true);
+        
+        if (false === $parsed) {
+            throw new Exception("Unable to parse ini file: {$source}");
+        }
+        
         if (!isset($parsed["client"])) {
             throw new Exception("Section [client] not found in {$source}");
         }
         
         $diff = \array_diff_key(\array_flip(self::REQUIRED_OPTIONS), $parsed["client"]);
-        if (count($diff) > 0) {
+        if (\count($diff) > 0) {
             throw new Exception("Missed required options: " . \implode(", ", \array_keys($diff)));
         }
         

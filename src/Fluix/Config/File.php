@@ -10,7 +10,7 @@ final class File
 {
     const READ_LENGTH = 2048;
     
-    private $file;
+    private \SplFileObject $file;
     
     private function __construct(\SplFileObject $file)
     {
@@ -20,7 +20,7 @@ final class File
         $this->file = $file;
     }
     
-    public static function fromPath(string $path, string $mode = "r")
+    public static function fromPath(string $path, string $mode = "r"): self
     {
         return new self(new \SplFileObject($path, $mode));
     }
@@ -53,7 +53,7 @@ final class File
     
     public function folder(): string
     {
-        return dirname($this->file->getPathname());
+        return \dirname($this->file->getPathname());
     }
     
     public function __toString(): string

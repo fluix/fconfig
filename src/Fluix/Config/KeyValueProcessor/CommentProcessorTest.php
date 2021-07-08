@@ -6,11 +6,11 @@ namespace Fluix\Config\KeyValueProcessor;
 
 use PHPUnit\Framework\TestCase;
 
-class CommentProcessorTest extends TestCase
+final class CommentProcessorTest extends TestCase
 {
-    private $processor;
+    private CommentProcessor $processor;
     
-    public function dataProvider()
+    public function dataProvider(): array
     {
         return [
             ["qwe", "qwe"],
@@ -22,10 +22,10 @@ class CommentProcessorTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testSubstitute(string $value, string $expected, string $env = "")
+    public function testSubstitute(string $value, string $expected, string $env = ""): void
     {
         if (!empty($env)) {
-            putenv($env);
+            \putenv($env);
         }
         
         $actual = $this->processor->process($value);

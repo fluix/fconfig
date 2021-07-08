@@ -11,14 +11,15 @@ use Fluix\Config\Exception\InvalidArgumentException;
 
 final class Config
 {
-    private $parser;
-    private $dumpers;
+    private Parser $parser;
+    /** @var Dumper[] */
+    private array $dumpers;
     /** @var callable[] */
     private $processors = [];
     
     public function __construct(Parser $parser, Dumper ...$dumpers)
     {
-        $this->parser = $parser;
+        $this->parser  = $parser;
         $this->dumpers = $dumpers;
     }
     
@@ -38,14 +39,14 @@ final class Config
         }
         
         foreach ($this->processors as $processor) {
-            call_user_func($processor, $result);
+            \call_user_func($processor, $result);
         }
     }
     
     public function assertRequired(ParserResult $result): void
     {
         foreach ($result->required() as $required) {
-            if (!array_key_exists($required, $result->values())) {
+            if (!\array_key_exists($required, $result->values())) {
                 throw new Exception("Missing required option '{$required}'");
             }
         }

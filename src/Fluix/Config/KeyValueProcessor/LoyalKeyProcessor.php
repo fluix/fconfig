@@ -8,16 +8,21 @@ use Fluix\Config\KeyProcessor;
 
 final class LoyalKeyProcessor
 {
-    private $processors;
+    /** @var KeyProcessor[] */
+    private array $processors;
     
     public function __construct(KeyProcessor ...$processors)
     {
         $this->processors = $processors;
     }
     
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function process($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return $value;
         }
     

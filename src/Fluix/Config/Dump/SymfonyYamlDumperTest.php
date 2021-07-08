@@ -6,7 +6,7 @@ namespace Fluix\Config\Dump;
 
 use Fluix\Config\Dumper;
 
-class SymfonyYamlDumperTest extends AbstractDumperTest
+final class SymfonyYamlDumperTest extends AbstractDumperTest
 {
     public function dumpProvider(): array
     {
@@ -32,19 +32,13 @@ JSON;
                     "null"         => null,
                     "secret_value" => "secret-value-here",
                     "int"          => 397,
-                    "object"       => [
-                        "key" => 21,
-                    ],
+                    "object"       => ["key" => 21,],
                     "array"        => [
-                        [
-                            "option31" => "test_env",
-                        ],
+                        ["option31" => "test_env",],
                     ],
                     "nested"       => [
                         "child1" => [
-                            "child2" => [
-                                "env" => "test_env_value_json2",
-                            ],
+                            "child2" => ["env" => "test_env_value_json2",],
                         ],
                     ],
                 ],

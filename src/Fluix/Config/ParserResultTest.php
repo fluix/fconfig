@@ -6,7 +6,7 @@ namespace Fluix\Config;
 
 use PHPUnit\Framework\TestCase;
 
-class ResultTest extends TestCase
+final class ParserResultTest extends TestCase
 {
     public function provider(): array
     {
@@ -42,7 +42,7 @@ class ResultTest extends TestCase
     /**
      * @dataProvider provider
      */
-    public function testInstantiation(array $config, array $values)
+    public function testInstantiation(array $config, array $values): void
     {
         $result = ParserResult::fromConfig($config);
         self::assertEquals($values, $result->values());
