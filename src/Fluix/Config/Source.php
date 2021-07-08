@@ -6,7 +6,7 @@ namespace Fluix\Config;
 
 final class Source
 {
-    private $source;
+    private File $source;
     
     private function __construct(File $source)
     {

@@ -7,13 +7,13 @@ use Fluix\Config\Source;
 
 class BaseCase
 {
-    private $source;
-    private $env;
+    private Source $source;
+    private array $env;
     
     public function __construct(Source $source, array $env)
     {
         $this->source = $source;
-        $this->env = $env;
+        $this->env    = $env;
         $this->populate(null);
     }
     
@@ -26,7 +26,7 @@ class BaseCase
     {
         foreach ($this->env as $key => $value) {
             $value = (null !== $crypt) ? $crypt->encrypt($value) : $value;
-            putenv(implode("=", [$key, $value]));
+            \putenv(\implode("=", [$key, $value]));
         }
     }
     

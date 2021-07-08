@@ -6,7 +6,7 @@ namespace Fluix\Config\Dump;
 
 use Fluix\Config\Dumper;
 
-class JsonDumperTest extends AbstractDumperTest
+final class JsonDumperTest extends AbstractDumperTest
 {
     public function dumpProvider(): array
     {

@@ -3,7 +3,7 @@
     "description": "FConfig Management",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.4",
+    "version": "2.0.0",
     "authors": [
         {
             "name": "Vladimir Melnik",
@@ -11,40 +11,34 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
+        "ext-json": "*",
         "readdle/crypto": "^0.0.3",
-        "symfony/yaml": "^4.3"
+        "symfony/yaml": "4.*|5.*"
     },
     "autoload": {
         "exclude-from-classmap": ["*Test.php"],
         "classmap": [
             "src/"
-        ],
-        "files": [
-            "src/Fluix/Config/functions.php"
         ]
     },
     "autoload-dev": {
         "classmap": [
             "src/"
-        ],
-        "files": [
-            "src/Fluix/Config/functions.php"
         ]
     },
     "require-dev": {
-        "escapestudios/symfony2-coding-standard": "^3.9",
+        "escapestudios/symfony2-coding-standard": "^3.12",
         "mikey179/vfsstream": "^1.6",
         "pheromone/phpcs-security-audit": "^2.0",
         "phpcompatibility/php-compatibility": "^9.3",
-        "phpunit/phpunit": "^8.4",
-        "slevomat/coding-standard": "^5.0",
-        "squizlabs/php_codesniffer": "^3.5"
+        "phpstan/phpstan": "^0.12",
+        "phpunit/phpunit": "^9.5",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "slevomat/coding-standard": "^7.0",
+        "squizlabs/php_codesniffer": "^3.6"
     },
     "config": {
-        "platform": {
-            "php": "7.2"
-        },
         "sort-packages": true
     },
     "bin": [
@@ -59,14 +53,16 @@
             "phpunit -c $(pwd)/phpunit.xml.dist"
         ],
         "lint-autofix": [
-            "phpcbf -s -n --standard=$(pwd)/phpcs.ruleset.xml --runtime-set testVersion 7.2- --extensions=php --encoding=utf-8 $(pwd)/src/ 2>/dev/null || true"
+            "phpcbf -s -n --standard=$(pwd)/phpcs.ruleset.xml --extensions=php --encoding=utf-8 $(pwd)/src/ 2>/dev/null || true"
         ],
         "lint": [
-            "phpcs -s -n --standard=$(pwd)/phpcs.ruleset.xml --runtime-set testVersion 7.2- --extensions=php --encoding=utf-8 $(pwd)/src/"
+            "phpcs -s -n --standard=$(pwd)/phpcs.ruleset.xml --extensions=php --encoding=utf-8 $(pwd)/src/"
         ],
+        "phpstan": "phpstan analyze -c phpstan.neon",
         "ci": [
             "@lint",
-            "@test"
+            "@test",
+            "@phpstan"
         ]
     }
 }

@@ -12,18 +12,20 @@ use Fluix\Config\Source;
 use Fluix\Config\Test\CaseProvider;
 use PHPUnit\Framework\TestCase;
 
-class ParserTest extends TestCase
+final class ParserTest extends TestCase
 {
+    /** @var \Fluix\Config\Parser */
     private $parser;
+    /** @var DefaultCrypt */
     private $crypt;
     
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->crypt = new DefaultCrypt(Secret::fromString(str_pad("", 16, "a")));
+        $this->crypt = new DefaultCrypt(Secret::fromString(\str_pad("", 16, "a")));
     }
     
-    public function provider()
+    public function provider(): array
     {
         $case1 = CaseProvider::json();
         $case2 = CaseProvider::db();
@@ -36,13 +38,13 @@ class ParserTest extends TestCase
     }
     
     /** @dataProvider provider */
-    public function testCases(Source $source, array $expected)
+    public function testCases(Source $source, array $expected): void
     {
         $actual = $this->parser->parse($source);
         self::assertEquals($expected, $actual->toArray());
     }
     
-    public function testUnsupportedConfigs()
+    public function testUnsupportedConfigs(): void
     {
         $case = CaseProvider::invalid();
         
@@ -54,6 +56,6 @@ class ParserTest extends TestCase
     
     protected function setUp(): void
     {
-        $this->parser = Factory::parser(str_pad("", 16, "a"));
+        $this->parser = Factory::parser(\str_pad("", 16, "a"));
     }
 }

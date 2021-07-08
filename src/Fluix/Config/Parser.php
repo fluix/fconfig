@@ -10,20 +10,20 @@ use Fluix\Config\KeyValueProcessor\LoyalValueProcessor;
 
 final class Parser
 {
-    private $keyProcessor;
-    private $valueProcessor;
-    private $readers;
+    private LoyalKeyProcessor $keyProcessor;
+    private LoyalValueProcessor $valueProcessor;
+    /** @var Reader[] */
+    private array $readers;
     
     public function __construct(LoyalKeyProcessor $keyProcessor, LoyalValueProcessor $valueProcessor, Reader ...$readers)
     {
-        $this->keyProcessor = $keyProcessor;
+        $this->keyProcessor   = $keyProcessor;
         $this->valueProcessor = $valueProcessor;
-        $this->readers = $readers;
+        $this->readers        = $readers;
     }
     
     public function parse(Source $config): ParserResult
     {
-        $result = null;
         foreach ($this->readers as $reader) {
             if (!$reader->supports($config->source())) {
                 continue;
@@ -33,10 +33,10 @@ final class Parser
         }
         
         throw new Exception(
-            sprintf(
+            \sprintf(
                 "Unable to read {$config->source()}, available readers: %s",
-                implode(", ", array_map(function (Reader $reader) {
-                    return get_class($reader);
+                \implode(", ", \array_map(function (Reader $reader) {
+                    return \get_class($reader);
                 }, $this->readers))
             )
         );
@@ -46,12 +46,12 @@ final class Parser
     {
         foreach ($config as $key => $value) {
             $oldKey = $key;
-            $key = $this->keyProcessor->process($key);
+            $key    = $this->keyProcessor->process($key);
             if ($oldKey !== $key) {
                 unset($config[$oldKey]);
             }
             
-            if (!is_numeric($key) && empty((string)$key)) {
+            if (!\is_numeric($key) && empty((string)$key)) {
                 continue;
             }
             

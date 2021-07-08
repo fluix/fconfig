@@ -9,12 +9,12 @@ use Fluix\Config\Exception\InvalidArgumentException;
 final class Format
 {
     private const FORMATS = [".json", ".array.php", ".const.php", ".parameters.yml"];
-    private $format;
+    private string $format;
     
     private function __construct(string $format)
     {
-        if (!in_array($format, self::FORMATS)) {
-            throw new InvalidArgumentException("Invalid format {$format}. Supported formats:" . implode(", ", self::FORMATS));
+        if (!\in_array($format, self::FORMATS)) {
+            throw new InvalidArgumentException("Invalid format {$format}. Supported formats:" . \implode(", ", self::FORMATS));
         }
         $this->format = $format;
     }
@@ -44,23 +44,20 @@ final class Format
         return $this->format;
     }
     
+    /** @param string|self $value */
     public function equals($value): bool
     {
-        if (is_string($value)) {
-            return $this->format === $value;
-        }
-        
         if ($value instanceof self) {
             return $this->format === $value->format;
         }
         
-        return false;
+        return $this->format === $value;
     }
     
     /** @return self[] */
     public static function all(): array
     {
-        return array_map(
+        return \array_map(
             function (string $format) {
                 return new self($format);
             },

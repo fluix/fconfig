@@ -10,7 +10,7 @@ use Fluix\Config\ValueProcessor;
 
 final class DecryptProcessor implements ValueProcessor, KeyProcessor
 {
-    private $crypt;
+    private Crypt $crypt;
     
     public function __construct(Crypt $crypt)
     {

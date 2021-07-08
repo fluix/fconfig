@@ -11,7 +11,7 @@ final class JsonDumper implements Dumper
 {
     public function dump(File $file, array $values): void
     {
-        $file->write(json_encode($values, JSON_PRETTY_PRINT));
+        $file->write(\json_encode($values, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
     }
     
     public function supports(Format $format): bool

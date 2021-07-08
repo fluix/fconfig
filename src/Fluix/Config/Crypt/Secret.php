@@ -8,11 +8,11 @@ use Fluix\Config\Exception\InvalidArgumentException;
 
 final class Secret
 {
-    private $value;
+    private string $value;
     
     private function __construct(string $value)
     {
-        if (16 !== strlen($value)) {
+        if (16 !== \strlen($value)) {
             throw new InvalidArgumentException("Secret must be 16 characters long");
         }
         

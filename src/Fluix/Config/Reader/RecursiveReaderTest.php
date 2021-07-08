@@ -8,16 +8,16 @@ use Fluix\Config\File;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
-class RecursiveReaderTest extends TestCase
+final class RecursiveReaderTest extends TestCase
 {
-    private $reader;
+    private RecursiveReader $reader;
     
     protected function setUp(): void
     {
         $this->reader = new RecursiveReader(new JsonReader);
     }
     
-    public function testBaseConfig()
+    public function testBaseConfig(): void
     {
         $root = vfsStream::setup();
         vfsStream::newFile("config-default.json")
@@ -47,7 +47,7 @@ JSON
         self::assertEquals(["port" => 3336, "database" => "schema", "host" => "localhost"], $result);
     }
     
-    public function testBaseConfigDoesntExist()
+    public function testBaseConfigDoesntExist(): void
     {
         $config = vfsStream::newFile("config.json")
             ->at(vfsStream::setup())

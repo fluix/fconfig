@@ -55,26 +55,20 @@ JSON
             Source::fromPath($file->url()),
             ["TEST_ENV_JSON1" => "test_env_value_json1", "TEST_ENV_JSON2" => "test_env_value_json2"],
             [
-                "values" => [
-                    "option1"  => "value1",
-                    "database" => "mm",
-                    "boolean"  => false,
-                    "null"     => null,
-                    "int"      => 397,
+                "values"   => [
+                    "option1"         => "value1",
+                    "database"        => "mm",
+                    "boolean"         => false,
+                    "null"            => null,
+                    "int"             => 397,
                     "commented-value" => "// commented-value",
-                    "object"   => [
-                        "key" => 21,
+                    "object"          => ["key" => 21,],
+                    "array"           => [
+                        ["option31" => "test_env_value_json1",],
                     ],
-                    "array"    => [
-                        [
-                            "option31" => "test_env_value_json1",
-                        ],
-                    ],
-                    "nested"   => [
+                    "nested"          => [
                         "child1" => [
-                            "child2" => [
-                                "env" => "test_env_value_json2",
-                            ],
+                            "child2" => ["env" => "test_env_value_json2",],
                         ],
                     ],
                 ],

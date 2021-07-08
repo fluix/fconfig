@@ -11,15 +11,15 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractDumperTest extends TestCase
 {
-    private $dumper;
-    private $content;
-    private $file;
+    private Dumper $dumper;
+    private File $file;
+    private \org\bovigo\vfs\vfsStreamFile $content;
     
     abstract public function dumpProvider(): array;
     
     public function formatProvider(): array
     {
-        return array_map(
+        return \array_map(
             function (Format $format) {
                 return [$format, $format->equals($this->format())];
             },
@@ -35,28 +35,29 @@ abstract class AbstractDumperTest extends TestCase
         self::assertEquals(
             $expected,
             $this->dumper->supports($format),
-            sprintf(
+            \sprintf(
                 "Expect {$format} for %s to be %s",
-                get_class($this->dumper),
-                var_export($expected, true)
+                \get_class($this->dumper),
+                \var_export($expected, true)
             )
         );
     }
     
     /**
+     * @param mixed $expected
      * @dataProvider dumpProvider
      */
     final public function testDump(array $config, $expected): void
     {
         $this->dumper->dump($this->file, $config);
-        self::assertEquals($expected, preg_replace("/(.*)([\s]+)$/m", "$1", $this->content->getContent()));
+        self::assertEquals($expected, \preg_replace("/(.*)([\s]+)$/m", "$1", $this->content->getContent()));
     }
     
     protected function setUp(): void
     {
-        $this->dumper = $this->dumper();
+        $this->dumper  = $this->dumper();
         $this->content = vfsStream::newFile($this->format()->destination("config"))->at(vfsStream::setup());
-        $this->file = File::fromPath($this->content->url(), "w");
+        $this->file    = File::fromPath($this->content->url(), "w");
     }
     
     abstract protected function format(): Format;

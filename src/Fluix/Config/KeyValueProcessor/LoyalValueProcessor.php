@@ -8,16 +8,21 @@ use Fluix\Config\ValueProcessor;
 
 final class LoyalValueProcessor
 {
-    private $processors;
+    /** @var ValueProcessor[] */
+    private array $processors;
     
     public function __construct(ValueProcessor ...$processors)
     {
         $this->processors = $processors;
     }
     
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function process($value)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return $value;
         }
     
