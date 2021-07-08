@@ -1,3 +1,6 @@
+# v2.0.1
+- Do not export .github folder
+
 # v2.0.0
 
 - Minimum PHP version 7.4
