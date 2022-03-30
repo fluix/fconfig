@@ -11,7 +11,6 @@ final class Exception extends \Exception
 {
     public static function unreadableFile(File $file, Reader ...$readers): self
     {
-
         return new Exception(
             sprintf(
                 "Unable to read {$file}, available readers: %s",
