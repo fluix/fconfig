@@ -3,21 +3,21 @@
 namespace Fluix\Config\Test\Cases;
 
 use Fluix\Config\Crypt;
-use Fluix\Config\Source;
+use Fluix\Config\Template;
 
 class BaseCase
 {
-    private Source $source;
+    private Template $source;
     private array $env;
     
-    public function __construct(Source $source, array $env)
+    public function __construct(Template $source, array $env)
     {
         $this->source = $source;
         $this->env    = $env;
         $this->populate(null);
     }
     
-    public function source(): Source
+    public function source(): Template
     {
         return $this->source;
     }
@@ -32,6 +32,6 @@ class BaseCase
     
     public function __toString()
     {
-        return (string)$this->source->source();
+        return (string)$this->source->template();
     }
 }

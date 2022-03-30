@@ -15,6 +15,7 @@ use Fluix\Config\KeyValueProcessor\DecryptProcessor;
 use Fluix\Config\KeyValueProcessor\EnvProcessor;
 use Fluix\Config\KeyValueProcessor\LoyalKeyProcessor;
 use Fluix\Config\KeyValueProcessor\LoyalValueProcessor;
+use Fluix\Config\KeyValueProcessor\FileProcessor;
 use Fluix\Config\Reader\JsonReader;
 use Fluix\Config\Reader\MyCnfReader;
 use Fluix\Config\Reader\RecursiveReader;
@@ -48,6 +49,29 @@ final class Factory
             ),
             new LoyalValueProcessor(
                 new EnvProcessor,
+                new DecryptProcessor(
+                    new DefaultCrypt(Secret::fromString($secret))
+                )
+            ),
+            new MyCnfReader,
+            new RecursiveReader(new JsonReader)
+        );
+    }
+
+    public static function fallbackParser(string $secret, Source $source): Parser
+    {
+        return new Parser(
+            new LoyalKeyProcessor(
+                new EnvProcessor,
+                new FileProcessor($source, new JsonReader),
+                new DecryptProcessor(
+                    new DefaultCrypt(Secret::fromString($secret))
+                ),
+                new CommentProcessor
+            ),
+            new LoyalValueProcessor(
+                new EnvProcessor,
+                new FileProcessor($source, new JsonReader),
                 new DecryptProcessor(
                     new DefaultCrypt(Secret::fromString($secret))
                 )

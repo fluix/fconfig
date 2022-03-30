@@ -116,7 +116,7 @@ $pathToConfig = __DIR__ . "/config/config.json";
 $configFolder = __DIR__ . "/config/_generated";
 
 $config->dump(
-    \Fluix\Config\Source::fromPath($pathToConfig),
+    \Fluix\Config\Template::fromPath($pathToConfig),
     $const = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::const()),
     $yaml = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::yaml()),
     $array = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::php()),
