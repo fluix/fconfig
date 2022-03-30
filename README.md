@@ -78,7 +78,7 @@ $ composer require fluix/fconfig
 
 ## Examples
 
-### Full Usage
+### Full usage
 
 Assume we have a folder structure
 ```
