@@ -2,14 +2,14 @@
 
 namespace Fluix\Config\Test\Cases;
 
-use Fluix\Config\Source;
+use Fluix\Config\Template;
 
 final class ValidCase extends BaseCase
 {
     private $expected;
     private $json;
     
-    public function __construct(Source $source, array $env, array $expected, string $json)
+    public function __construct(Template $source, array $env, array $expected, string $json)
     {
         parent::__construct($source, $env);
         $this->expected = $expected;

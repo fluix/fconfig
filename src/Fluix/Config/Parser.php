@@ -21,25 +21,17 @@ final class Parser
         $this->readers = $readers;
     }
     
-    public function parse(Source $config): ParserResult
+    public function parse(Template $config): ParserResult
     {
-        $result = null;
         foreach ($this->readers as $reader) {
-            if (!$reader->supports($config->source())) {
+            if (!$reader->supports($config->template())) {
                 continue;
             }
         
-            return $this->process($reader->read($config->source()));
+            return $this->process($reader->read($config->template()));
         }
         
-        throw new Exception(
-            sprintf(
-                "Unable to read {$config->source()}, available readers: %s",
-                implode(", ", array_map(function (Reader $reader) {
-                    return get_class($reader);
-                }, $this->readers))
-            )
-        );
+        throw Exception::unreadableFile($config->template(), ...$this->readers);
     }
     
     private function process(array $config): ParserResult
