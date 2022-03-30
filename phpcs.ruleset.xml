@@ -2,7 +2,7 @@
 <ruleset name="FConfig Code Standard">
     <description>FConfig Code Standard</description>
 
-    <config name="testVersion" value="7.4-"/>
+    <config name="testVersion" value="8.0-"/>
     <arg name="extensions" value="php" />
     <arg name="encoding" value="utf-8"/>
     <arg value="s"/>

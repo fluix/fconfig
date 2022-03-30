@@ -14,9 +14,7 @@ final class Exception extends \Exception
         return new Exception(
             \sprintf(
                 "Unable to read {$file}, available readers: %s",
-                \implode(", ", \array_map(function (Reader $reader) {
-                    return \get_class($reader);
-                }, $readers))
+                \implode(", ", \array_map(static fn (Reader $reader) => $reader::class, $readers))
             )
         );
     }

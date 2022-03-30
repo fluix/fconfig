@@ -109,6 +109,7 @@ $secret = "ff7f8dc665734d9d"; // don't use this secret in your application, gene
 
 $config = \Fluix\Config\Factory::config(
     $secret,
+    null,
     "postProcessor"
 );
 

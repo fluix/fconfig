@@ -22,10 +22,10 @@ use Fluix\Config\Reader\RecursiveReader;
 
 final class Factory
 {
-    public static function config(string $secret, callable ...$processors): Config
+    public static function config(string $secret, ?File $fallback, callable ...$processors): Config
     {
         $config = new Config(
-            self::parser($secret),
+            self::parser($secret, $fallback),
             new JsonDumper,
             new PhpConstDumper,
             new PhpDumper,
@@ -37,47 +37,34 @@ final class Factory
         return $config;
     }
     
-    public static function parser(string $secret): Parser
+    public static function parser(string $secret, ?File $fallback = null): Parser
     {
         return new Parser(
-            new LoyalKeyProcessor(
-                new EnvProcessor,
-                new DecryptProcessor(
-                    new DefaultCrypt(Secret::fromString($secret))
-                ),
-                new CommentProcessor
-            ),
-            new LoyalValueProcessor(
-                new EnvProcessor,
-                new DecryptProcessor(
-                    new DefaultCrypt(Secret::fromString($secret))
-                )
-            ),
+            new LoyalKeyProcessor(...self::keyProcessors($secret, $fallback)),
+            new LoyalValueProcessor(...self::valueProcessors($secret, $fallback)),
             new MyCnfReader,
             new RecursiveReader(new JsonReader)
         );
     }
 
-    public static function fallbackParser(string $secret, Source $source): Parser
+    /** @return \Generator<KeyProcessor> */
+    private static function keyProcessors(string $secret, ?File $fallback): \Generator
     {
-        return new Parser(
-            new LoyalKeyProcessor(
-                new EnvProcessor,
-                new FileProcessor($source, new JsonReader),
-                new DecryptProcessor(
-                    new DefaultCrypt(Secret::fromString($secret))
-                ),
-                new CommentProcessor
-            ),
-            new LoyalValueProcessor(
-                new EnvProcessor,
-                new FileProcessor($source, new JsonReader),
-                new DecryptProcessor(
-                    new DefaultCrypt(Secret::fromString($secret))
-                )
-            ),
-            new MyCnfReader,
-            new RecursiveReader(new JsonReader)
-        );
+        yield new EnvProcessor;
+        if (null !== $fallback) {
+            yield new FileProcessor($fallback, new JsonReader);
+        }
+        yield new DecryptProcessor(new DefaultCrypt(Secret::fromString($secret)));
+        yield new CommentProcessor;
+    }
+    
+    /** @return \Generator<ValueProcessor> */
+    private static function valueProcessors(string $secret, ?File $fallback): \Generator
+    {
+        yield new EnvProcessor;
+        if (null !== $fallback) {
+            yield new FileProcessor($fallback, new JsonReader);
+        }
+        yield new DecryptProcessor(new DefaultCrypt(Secret::fromString($secret)));
     }
 }

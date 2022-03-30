@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Fluix\Config\KeyValueProcessor;
 
 use Fluix\Config\Exception\Exception;
+use Fluix\Config\File;
 use Fluix\Config\KeyProcessor;
 use Fluix\Config\Reader;
-use Fluix\Config\Source;
 use Fluix\Config\ValueProcessor;
 
 final class FileProcessor implements ValueProcessor, KeyProcessor
 {
     private array $data = [];
 
-    public function __construct(Source $source, Reader ...$readers)
+    public function __construct(File $file, Reader ...$readers)
     {
         foreach ($readers as $reader) {
-            if ($reader->supports($source->source())) {
-                $this->data = $reader->read($source->source());
+            if ($reader->supports($file)) {
+                $this->data = $reader->read($file);
                 return;
             }
         }
-        throw Exception::unreadableFile($source->source(), ...$readers);
+        throw Exception::unreadableFile($file, ...$readers);
     }
 
     public function process(string $value): string

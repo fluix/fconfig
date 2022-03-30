@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Fluix\Config\KeyValueProcessor;
 
-use Fluix\Config\Config;
-use Fluix\Config\Dump\Format;
+use Fluix\Config\File;
 use Fluix\Config\Reader\JsonReader;
-use Fluix\Config\Source;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
@@ -28,10 +26,10 @@ class FileProcessorTest extends TestCase
         $envFile = vfsStream::newFile("env.json")
             ->at(vfsStream::setup())
             ->withContent(\json_encode($data));
-        $source = Source::fromPath($envFile->url());
+        $source  = File::fromPath($envFile->url());
 
         $fileProcessor = new FileProcessor($source, new JsonReader);
-        $actual = $fileProcessor->process($value);
+        $actual        = $fileProcessor->process($value);
 
         self::assertEquals($expected, $actual);
     }
