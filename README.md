@@ -118,7 +118,7 @@ $pathToConfig = __DIR__ . "/config/config.json";
 $configFolder = __DIR__ . "/config/_generated";
 
 $config->dump(
-    \Fluix\Config\Template::fromPath($pathToConfig),
+    \Fluix\Config\Source::fromPath($pathToConfig),
     $const = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::const()),
     $yaml = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::yaml()),
     $array = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::php()),
@@ -174,13 +174,13 @@ $secret             = "ff7f8dc665734d9d"; // don't use this secret in your appli
 $pathToFallbackFile = __DIR__ . "/fallback.json";
 $pathToConfig       = __DIR__ . "/config/config.json";
 $configFolder       = __DIR__ . "/config/_generated";
-$config = \Fluix\Config\Factory::config(
+$config = \Fluix\Config\Factory::fallbackConfig(
     $secret,
     Fluix\Config\File::fromPath($pathToFallbackFile),
     "postProcessor"
 );
 $config->dump(
-    \Fluix\Config\Template::fromPath($pathToConfig),
+    \Fluix\Config\Source::fromPath($pathToConfig),
     $const = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::const()),
     $yaml = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::yaml()),
     $array = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::php()),

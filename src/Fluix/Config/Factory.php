@@ -22,7 +22,12 @@ use Fluix\Config\Reader\RecursiveReader;
 
 final class Factory
 {
-    public static function config(string $secret, ?File $fallback, callable ...$processors): Config
+    public static function config(string $secret, callable ...$processors): Config
+    {
+        return self::fallbackConfig($secret, null, ...$processors);
+    }
+
+    public static function fallbackConfig(string $secret, ?File $fallback, callable ...$processors): Config
     {
         $config = new Config(
             self::parser($secret, $fallback),
@@ -31,9 +36,9 @@ final class Factory
             new PhpDumper,
             new SymfonyYamlDumper
         );
-        
+
         $config->withPostProcessors(...$processors);
-        
+
         return $config;
     }
     

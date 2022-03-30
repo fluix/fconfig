@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Fluix\Config\Test;
 
-use Fluix\Config\Template;
+use Fluix\Config\Source;
 use Fluix\Config\Test\Cases\BaseCase;
 use Fluix\Config\Test\Cases\ValidCase;
 use org\bovigo\vfs\vfsStream;
@@ -52,7 +52,7 @@ JSON
             );
     
         return new ValidCase(
-            Template::fromPath($file->url()),
+            Source::fromPath($file->url()),
             ["TEST_ENV_JSON1" => "test_env_value_json1", "TEST_ENV_JSON2" => "test_env_value_json2"],
             [
                 "values" => [
@@ -132,7 +132,7 @@ JSON
             );
     
         return new ValidCase(
-            Template::fromPath($file->url()),
+            Source::fromPath($file->url()),
             ["TEST_ENV_DB" => "test_env_value_db"],
             [
                 "values" => [
@@ -165,7 +165,7 @@ CONTENT
             );
         
         return new BaseCase(
-            Template::fromPath($file->url()),
+            Source::fromPath($file->url()),
             []
         );
     }
@@ -190,7 +190,7 @@ CONTENT
             );
         
         return new BaseCase(
-            Template::fromPath($file->url()),
+            Source::fromPath($file->url()),
             []
         );
     }

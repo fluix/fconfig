@@ -8,7 +8,7 @@ use Fluix\Config\Crypt\DefaultCrypt;
 use Fluix\Config\Crypt\Secret;
 use Fluix\Config\Exception\Exception;
 use Fluix\Config\Factory;
-use Fluix\Config\Template;
+use Fluix\Config\Source;
 use Fluix\Config\Test\CaseProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +36,7 @@ class ParserTest extends TestCase
     }
     
     /** @dataProvider provider */
-    public function testCases(Template $source, array $expected)
+    public function testCases(Source $source, array $expected)
     {
         $actual = $this->parser->parse($source);
         self::assertEquals($expected, $actual->toArray());

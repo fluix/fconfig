@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace Fluix\Config;
 
-final class Template
+final class Source
 {
-    private $template;
+    private $source;
     
-    private function __construct(File $template)
+    private function __construct(File $source)
     {
-        $this->template = $template;
+        $this->source = $source;
     }
     
     public static function fromPath(string $path): self
@@ -18,13 +18,13 @@ final class Template
         return new self(File::fromPath($path));
     }
     
-    public function template(): File
+    public function source(): File
     {
-        return $this->template;
+        return $this->source;
     }
     
     public function __toString(): string
     {
-        return (string)$this->template;
+        return (string)$this->source;
     }
 }
