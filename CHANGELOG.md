@@ -1,3 +1,6 @@
+# v3.0.1
+- Added fallback file processor
+
 # v2.0.1
 - Do not export .github folder
 

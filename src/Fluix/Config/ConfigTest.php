@@ -38,7 +38,7 @@ final class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->format = Format::json();
-        $this->config = Factory::config(\str_pad("", 16, "a"));
+        $this->config = Factory::config(\str_pad("", 16, "a"), null);
         
         $this->content     = vfsStream::newFile($this->format->destination("config"))->at(vfsStream::setup());
         $this->destination = Destination::create(\dirname($this->content->url()), $this->format, "config");
