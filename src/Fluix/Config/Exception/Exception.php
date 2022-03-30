@@ -11,10 +11,13 @@ final class Exception extends \Exception
 {
     public static function unreadableFile(File $file, Reader ...$readers): self
     {
+
         return new Exception(
-            \sprintf(
+            sprintf(
                 "Unable to read {$file}, available readers: %s",
-                \implode(", ", \array_map(static fn (Reader $reader) => $reader::class, $readers))
+                \implode(", ", \array_map(function (Reader $reader) {
+                    return get_class($reader);
+                }, $readers))
             )
         );
     }
