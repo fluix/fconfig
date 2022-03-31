@@ -2,7 +2,7 @@ name: PHP Linter & Tests
 
 on:
   push:
-    branches: [ release_v2.0 ]
+    branches: [ master ]
   pull_request:
     branches: [ release_v2.0 ]
 
