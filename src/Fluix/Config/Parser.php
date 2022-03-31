@@ -32,14 +32,7 @@ final class Parser
             return $this->process($reader->read($config->source()));
         }
         
-        throw new Exception(
-            \sprintf(
-                "Unable to read {$config->source()}, available readers: %s",
-                \implode(", ", \array_map(function (Reader $reader) {
-                    return \get_class($reader);
-                }, $this->readers))
-            )
-        );
+        throw Exception::unreadableFile($config->source(), ...$this->readers);
     }
     
     private function process(array $config): ParserResult

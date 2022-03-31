@@ -68,7 +68,7 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
     <!--  TODO: Fix & remove after migration to php8  -->
     <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference.ClassNameReferencedViaFunctionCall">
-        <exclude-pattern>src/Fluix/Config/Parser\.php</exclude-pattern>
+        <exclude-pattern>src/Fluix/Config/Exception/Exception.php</exclude-pattern>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">

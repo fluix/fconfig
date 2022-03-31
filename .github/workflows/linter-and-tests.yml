@@ -44,3 +44,16 @@ jobs:
           composer run register-standards
       - name: Run Tests
         run: composer run-script ci
+
+  autotag:
+    needs: run
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    name: Autotagging
+    steps:
+      - uses: melya/action-autotag@1.2.9
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          strategy: composer
+          tag_prefix: 'v'
