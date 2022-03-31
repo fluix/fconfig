@@ -1,4 +1,8 @@
 # v3.0.1
+- Support PHP >= 8.0
+- Added fallback file processor
+
+# v2.0.2
 - Added fallback file processor
 
 # v2.0.1
