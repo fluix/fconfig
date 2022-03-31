@@ -22,17 +22,17 @@ final class Parser
         $this->readers        = $readers;
     }
     
-    public function parse(Source $config): ParserResult
+    public function parse(Template $config): ParserResult
     {
         foreach ($this->readers as $reader) {
-            if (!$reader->supports($config->source())) {
+            if (!$reader->supports($config->template())) {
                 continue;
             }
         
-            return $this->process($reader->read($config->source()));
+            return $this->process($reader->read($config->template()));
         }
         
-        throw Exception::unreadableFile($config->source(), ...$this->readers);
+        throw Exception::unreadableFile($config->template(), ...$this->readers);
     }
     
     private function process(array $config): ParserResult

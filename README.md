@@ -110,6 +110,7 @@ $secret = "ff7f8dc665734d9d"; // don't use this secret in your application, gene
 
 $config = \Fluix\Config\Factory::config(
     $secret,
+    null,
     "postProcessor"
 );
 
@@ -117,7 +118,7 @@ $pathToConfig = __DIR__ . "/config/config.json";
 $configFolder = __DIR__ . "/config/_generated";
 
 $config->dump(
-    \Fluix\Config\Source::fromPath($pathToConfig),
+    \Fluix\Config\Template::fromPath($pathToConfig),
     $const = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::const()),
     $yaml = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::yaml()),
     $array = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::php()),
@@ -149,7 +150,6 @@ Config has been successfully dumped to your-app/config/_generated/config.array.p
 Config has been successfully dumped to your-app/config/_generated/config.json
 
 ```
-
 ### Usage with fallback mechanism
 You can use JSON config files as source of values as well.
 
@@ -160,31 +160,36 @@ your-app
 ├── composer.lock
 ├── fallback.json
 ├── config
-│   └── ...
+│   └── ...
 └── ...
 ```
 
 ```php
 <?php
+
 require_once "vendor/autoload.php";
+
 // Secret is a random string with length of 16 characters, which is used for encrypting/decrypting your secure configuration.
 // Example of generating secret via openssl: openssl rand -hex 8
 $secret             = "ff7f8dc665734d9d"; // don't use this secret in your application, generate a new one and store it in a safe place.
 $pathToFallbackFile = __DIR__ . "/fallback.json";
 $pathToConfig       = __DIR__ . "/config/config.json";
 $configFolder       = __DIR__ . "/config/_generated";
-$config = \Fluix\Config\Factory::fallbackConfig(
+
+$config = \Fluix\Config\Factory::config(
     $secret,
     Fluix\Config\File::fromPath($pathToFallbackFile),
     "postProcessor"
 );
+
 $config->dump(
-    \Fluix\Config\Source::fromPath($pathToConfig),
+    \Fluix\Config\Template::fromPath($pathToConfig),
     $const = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::const()),
     $yaml = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::yaml()),
     $array = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::php()),
     $json = \Fluix\Config\Dump\Destination::create($configFolder, \Fluix\Config\Dump\Format::json())
 );
+
 function postProcessor(\Fluix\Config\ParserResult $result)
 {
     // extra actions could be performed here
@@ -194,6 +199,7 @@ function postProcessor(\Fluix\Config\ParserResult $result)
 
 ```bash
 echo "{\"ENV_VARIABLE2\":\"test_env_2\"}" > your-app/fallback.json
+
 cd your-app
 ENV_VARIABLE1=test_env php dump-config.php
 ```

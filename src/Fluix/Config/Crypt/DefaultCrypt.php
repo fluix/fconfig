@@ -5,23 +5,24 @@ declare(strict_types = 1);
 namespace Fluix\Config\Crypt;
 
 use Fluix\Config\Crypt;
+use Readdle\Crypt\CryptoInterface;
 
 final class DefaultCrypt implements Crypt
 {
-    private Secret $secret;
-    
-    public function __construct(Secret $secret)
+    private CryptoInterface $crypto;
+
+    public function __construct(CryptoInterface $crypto)
     {
-        $this->secret = $secret;
+        $this->crypto = $crypto;
     }
     
     public function encrypt(string $value): string
     {
-        return \Readdle\Crypt\Crypto::encrypt($value, (string)$this->secret);
+        return $this->crypto->encrypt($value);
     }
     
     public function decrypt(string $value): string
     {
-        return \Readdle\Crypt\Crypto::decrypt($value, (string)$this->secret);
+        return $this->crypto->decrypt($value);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Fluix\Config;
 
 use Fluix\Config\Crypt\DefaultCrypt;
-use Fluix\Config\Crypt\Secret;
 use Fluix\Config\Dump\JsonDumper;
 use Fluix\Config\Dump\PhpConstDumper;
 use Fluix\Config\Dump\PhpDumper;
@@ -19,15 +18,12 @@ use Fluix\Config\KeyValueProcessor\FileProcessor;
 use Fluix\Config\Reader\JsonReader;
 use Fluix\Config\Reader\MyCnfReader;
 use Fluix\Config\Reader\RecursiveReader;
+use Readdle\Crypt\Crypto;
+use Readdle\Crypt\Secret;
 
 final class Factory
 {
-    public static function config(string $secret, callable ...$processors): Config
-    {
-        return self::fallbackConfig($secret, null, ...$processors);
-    }
-
-    public static function fallbackConfig(string $secret, ?File $fallback, callable ...$processors): Config
+    public static function config(string $secret, ?File $fallback, callable ...$processors): Config
     {
         $config = new Config(
             self::parser($secret, $fallback),
@@ -36,9 +32,9 @@ final class Factory
             new PhpDumper,
             new SymfonyYamlDumper
         );
-
+        
         $config->withPostProcessors(...$processors);
-
+        
         return $config;
     }
     
@@ -59,7 +55,7 @@ final class Factory
         if (null !== $fallback) {
             yield new FileProcessor($fallback, new JsonReader);
         }
-        yield new DecryptProcessor(new DefaultCrypt(Secret::fromString($secret)));
+        yield new DecryptProcessor(new DefaultCrypt(new Crypto(Secret::fromString($secret))));
         yield new CommentProcessor;
     }
     
@@ -70,6 +66,6 @@ final class Factory
         if (null !== $fallback) {
             yield new FileProcessor($fallback, new JsonReader);
         }
-        yield new DecryptProcessor(new DefaultCrypt(Secret::fromString($secret)));
+        yield new DecryptProcessor(new DefaultCrypt(new Crypto(Secret::fromString($secret))));
     }
 }

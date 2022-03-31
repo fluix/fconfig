@@ -29,7 +29,7 @@ final class Config
         return $this;
     }
     
-    public function dump(Source $config, Destination ...$destinations): void
+    public function dump(Template $config, Destination ...$destinations): void
     {
         $result = $this->parser->parse($config);
         $this->assertRequired($result);
