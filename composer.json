@@ -13,7 +13,7 @@
     "require": {
         "php": ">=8.0.2",
         "ext-json": "*",
-        "readdle/crypto": "^0.0.3",
+        "readdle/crypto": "^2.0",
         "symfony/yaml": "^6.0"
     },
     "autoload": {

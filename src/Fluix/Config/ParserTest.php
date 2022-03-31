@@ -5,12 +5,13 @@ declare(strict_types = 1);
 namespace Fluix\Config\Parser;
 
 use Fluix\Config\Crypt\DefaultCrypt;
-use Fluix\Config\Crypt\Secret;
 use Fluix\Config\Exception\Exception;
 use Fluix\Config\Factory;
 use Fluix\Config\Template;
 use Fluix\Config\Test\CaseProvider;
 use PHPUnit\Framework\TestCase;
+use Readdle\Crypt\Crypto;
+use Readdle\Crypt\Secret;
 
 final class ParserTest extends TestCase
 {
@@ -22,7 +23,7 @@ final class ParserTest extends TestCase
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->crypt = new DefaultCrypt(Secret::fromString(\str_pad("", 16, "a")));
+        $this->crypt = new DefaultCrypt(new Crypto(Secret::fromString(\str_pad("", 16, "a"))));
     }
     
     public function provider(): array
